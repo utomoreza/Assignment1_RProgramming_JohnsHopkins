@@ -67,7 +67,7 @@ You can see some example output from this function below. The function that you 
 
 # Solutions for the Assignment
 
-As mentioned in the 
+As mentioned in the Introducton
 
 ## R Markdown
 
