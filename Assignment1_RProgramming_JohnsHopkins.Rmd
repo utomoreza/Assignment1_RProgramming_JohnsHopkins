@@ -51,7 +51,7 @@ Write a function that reads a directory full of files and reports the number of 
 
 You can see some example output from this function below. The function that you write should be able to match this output. Please save your code to a file named complete.R. To run the submit script for this part, make sure your working directory has the file complete.R in it.
 
-[complete-demo.html](https://d3c33hcgiwev3.cloudfront.net/_3b0da118473bfa0845efddcbe29cc336_complete-demo.html?Expires=1579046400&Signature=W4Umay74Lh-ob~DFVOvnVt4X3njMFbWkl53rmYac~V8-PPrTY8DT4L91zF9x4PLBxpNFvCA5vB7jqAGsr6S6F7rZ6vrKrcfTNbEVzK2gqO0e~V~tvtGqzM7N1dYt~BW0gnd1hPDUFvOKINK2Qs0Js3zh9sPAokLFOgHYGYvUjEo_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A)
+[complete-demo.html](https://d3c33hcgiwev3.cloudfront.net/_3b0da118473bfa0845efddcbe29cc336_complete-demo.html?Expires=1579478400&Signature=FoMtA~AuB4EDuE~k4lh4RKr4PqP5FF11L8vwiJhr9Nkvbzs5xJpCIW4aEPgE4BFUkUQFEiCNWMM6ViPp5r61pmit4b~AmbB-zPPncBNQK7yU9IuTHvHizSaTuihOakrLHH4-TDSuR4-pzld5ooenb10zAeTbJ~oZSVtzg49scFU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A)
 
 ### Part 3
 
@@ -63,11 +63,24 @@ For this function you will need to use the 'cor' function in R which calculates 
 
 You can see some example output from this function below. The function that you write should be able to approximately match this output. Note that because of how R rounds and presents floating point numbers, the output you generate may differ slightly from the example output. Please save your code to a file named corr.R. To run the submit script for this part, make sure your working directory has the file corr.R in it.
 
-[corr-demo.html](https://d3c33hcgiwev3.cloudfront.net/_e92e575b8e62dcb1e3a086d2ff0d5a1e_corr-demo.html?Expires=1579046400&Signature=f7a54zvjc6hrc2UZ8R9ilx7Uhxw8kVJItmS~I61IBMwOnGshZGLmQGSUcLuBMOFDmwuXixosZf7gASy-O7bQaTG0S1m~xYsE3bZAzOGxCZ0TPmJzqH7olfD~~sOagS2Fk1Ucxy3VBDujozaKI9bNQ8gp-9Y4kSOADt4Usc6B-IU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A)
+[corr-demo.html](https://d3c33hcgiwev3.cloudfront.net/_e92e575b8e62dcb1e3a086d2ff0d5a1e_corr-demo.html?Expires=1579478400&Signature=GVi4kTAcy16UFefqsCHstRYjXMNcaZ7FRxhbDCp0tkWlXR1etzcp43kLsUfzNuHkHM75MH0nxT7DSB~z1b1ql1Uyd7eOLGZ1EUMB8oZTdtmpTqhx~C~XrcQ3qnXaxFpz7n7Rs5KxxxlIbPm~oguTywwOfUrJTBHEAvOUfuppxpE_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A)
 
 # Solutions for the Assignment
 
 As mentioned in the Introducton
+
+## `pollutantmean()`
+
+```{r}
+source("pollutantmean.R")
+pollutantmean("specdata", "sulfate", c(23,151,311))
+```
+
+```{r}
+source("complete.R")
+complete("specdata", id = 21:25)
+```
+
 
 ## R Markdown
 
