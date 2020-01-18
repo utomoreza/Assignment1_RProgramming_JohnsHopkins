@@ -67,7 +67,7 @@ You can see some example output from this function below. The function that you 
 
 # Solutions for the Assignment
 
-As mentioned in the Introducton, in this Solution section, the answers are split into three sub-section.
+As mentioned in the [Introduction](# Introducton), in this Solution section, the answers are split into three sub-section.
 
 ## Function `pollutantmean()`
 
@@ -236,22 +236,100 @@ complete("specdata", pollutant = "both", id = c(12, 89, 302))
 
 ## Function `corr()`
 
-## R Markdown
+Below are the listings for the third function.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+corr <- function(directory, threshold = 0){
+    # declare id variable as the number (and order) of csv files available
+    id = 1:332
+    
+    # declare initial iteration to be used in for loop
+    iterate <- 1:length(id)
+    
+    # change id data type to numerical vector
+    id_vctr <- as.numeric(id)
+    
+    # declare initial variable as a buffer
+    cor2 <- NA
+    
+    # declare the pollutants available
+    pollutant <- c("sulfate","nitrate")
+    
+    # loop the function all the way of csv files desired
+    for (i in iterate) {
+        # set format for the index so that it's in 3 digits, eg "001"
+        id_idx <- as.character(sprintf("%03d", id_vctr[i]))
+        
+        # create csv file path to be used
+        loc <- paste(as.character(directory),'/',id_idx,'.csv', sep = "")
+        
+        # calling the csv file
+        csv <- read.csv(file = loc)
+        
+        # save both complete observations (not NA) in buffer variable temporarily
+        pollut_buffer1 <- sum(!is.na(csv[,pollutant[1]]))
+        pollut_buffer2 <- sum(!is.na(csv[,pollutant[2]]))
+        
+        # examine whether number of non-NA rows in sulfate col is shorter than
+        # or equal to that in nitrate col
+        if (pollut_buffer1 <= pollut_buffer2) {
+            # create x and y variables as non-NA sulfate and nitrate cols
+            x <- csv[!is.na(csv[,pollutant[1]]), pollutant[1]]
+            y <- csv[!is.na(csv[,pollutant[1]]), pollutant[2]]
+            
+            # examine whether number of non-NA rows is greater than or
+            # equal to threshold argument
+            if (pollut_buffer1 >= threshold) {
+                # if yes, calculate correlation between sulfate and nitrate
+                cor1 <- cor(x = x, y = y)
+                
+                # if no, assign as NA
+            } else {
+                cor1 <- NA
+            }
+            
+            # if number of non-NA rows in sulfate col is longer than that in
+            # nitrate col
+        } else {
+            # create x and y variables as non-NA sulfate and nitrate cols
+            x <- csv[!is.na(csv[,pollutant[2]]), pollutant[1]]
+            y <- csv[!is.na(csv[,pollutant[2]]), pollutant[2]]
+            
+            # examine whether number of non-NA rows is greater than or
+            # equal to threshold argument
+            if (pollut_buffer2 >= threshold) {
+                # if yes, calculate correlation between sulfate and nitrate
+                cor1 <- cor(x = x, y = y)
+                
+                # if no, assign as NA
+            } else {
+                cor1 <- NA
+            }
+        }
+        # collect correlation value from each csv file
+        cor2 <- c(cor2, cor1)
+        
+    }
+    # get all correlation results without any NA value and assign
+    # the data type of the final results as numeric
+    output <- as.numeric(cor2[!is.na(cor2)])
+    
+    # return the value
+    return(output)
+}
 ```
 
-## Including Plots
+And now let us test the function by calling it and inserting its arguments.
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+source("corr.R")
+test1 <- corr("specdata", 5000)
+length(test1)
+summary(test1)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+test2 <- corr("specdata", 500)
+length(test2)
+summary(test2)
+```

@@ -416,12 +416,165 @@ summary {
 </div>
 <div id="solutions-for-the-assignment" class="section level1">
 <h1>Solutions for the Assignment</h1>
-<p>As mentioned in the Introducton</p>
-<div id="pollutantmean" class="section level2">
-<h2><code>pollutantmean()</code></h2>
+<p>As mentioned in the <a href="#%20Introducton">Introduction</a>, in this Solution section, the answers are split into three sub-section.</p>
+<div id="function-pollutantmean" class="section level2">
+<h2>Function <code>pollutantmean()</code></h2>
+<p>Below are the listings for the first function.</p>
+<pre class="r"><code>pollutantmean &lt;- function(directory, pollutant, id = 1:332) {
+    
+    # declare initial variable as a buffer
+    buffer &lt;- c(0)
+    
+    # declare initial iteration to be used in for loop
+    iterate &lt;- 1:length(id)
+    
+    # change id data type to numerical vector
+    id_vctr &lt;- as.numeric(id)
+    
+    # loop the function all the way of csv files desired
+    for(i in iterate){
+        # set format for the index so that it's in 3 digits, eg &quot;001&quot;
+        id_idx &lt;- as.character(sprintf(&quot;%03d&quot;, id_vctr[i]))
+        
+        # create csv file path to be used
+        loc &lt;- paste(as.character(directory),'/',id_idx,'.csv', sep = &quot;&quot;)
+        
+        # calling the csv file
+        csv &lt;- read.csv(file = loc)
+        
+        # subset the pollutant type
+        pollut &lt;- csv[,pollutant]
+        
+        # save the pollutant observations in buffer variable temporarily
+        buffer &lt;- c(buffer, pollut)
+    }
+    
+    # calculate mean of the pollutant observations (by excluding the first idx of buffer var)
+    avg &lt;- mean(buffer[2:length(buffer)], na.rm = T)
+    
+    # return the value
+    return(avg)
+}</code></pre>
+<p>And now let us test the function by calling it and inserting its arguments.</p>
 <pre class="r"><code>source(&quot;pollutantmean.R&quot;)
-pollutantmean(&quot;specdata&quot;, &quot;sulfate&quot;, 1:10)</code></pre>
-<pre><code>## [1] 3.880701</code></pre>
+pollutantmean(&quot;specdata&quot;, &quot;sulfate&quot;, c(23,151,311))</code></pre>
+<pre><code>## [1] 1.482497</code></pre>
+<p>Well done! The <code>pollutantmean()</code> function can work as desired.</p>
+</div>
+<div id="function-complete" class="section level2">
+<h2>Function <code>complete()</code></h2>
+<p>Below are the listings for the second function.</p>
+<pre class="r"><code>complete &lt;- function(directory, pollutant = &quot;both&quot;, id = 1:332){
+    # declare initial iteration to be used in for loop
+    iterate &lt;- 1:length(id)
+    
+    # change id data type to numerical vector
+    id_vctr &lt;- as.numeric(id)
+    
+    # examine whether we want to show nobs of sulfate, nitrate, or both
+    if (pollutant == &quot;both&quot;) {
+        pollut &lt;- c('sulfate','nitrate')
+        
+        # declare initial variable as a buffer
+        nobs1 &lt;- c(0)
+        nobs2 &lt;- c(0)
+        
+        # loop the function all the way of csv files desired
+        for (i in iterate) {
+            # set format for the index so that it's in 3 digits, eg &quot;001&quot;
+            id_idx &lt;- as.character(sprintf(&quot;%03d&quot;, id_vctr[i]))
+            
+            # create csv file path to be used
+            loc &lt;- paste(as.character(directory),'/',id_idx,'.csv', sep = &quot;&quot;)
+            
+            # calling the csv file
+            csv &lt;- read.csv(file = loc)
+            
+            # save both complete observations (not NA) in buffer variable temporarily
+            pollut_buffer1 &lt;- sum(!is.na(csv[,pollut[1]]))
+            pollut_buffer2 &lt;- sum(!is.na(csv[,pollut[2]]))
+            
+            # combine nobs from each csv file in one file
+            nobs1 &lt;- c(nobs1,pollut_buffer1)
+            nobs2 &lt;- c(nobs2,pollut_buffer2)
+            
+            # getting each pollutant's name for visualising
+            nobs1_name &lt;- pollut[1]
+            nobs2_name &lt;- pollut[2]
+        }
+        
+        # create data frame to show the results
+        completedf &lt;- data.frame(id_vctr, nobs1[2:length(nobs1)], nobs2[2:length(nobs2)])
+        
+        # rename each columns accordingly
+        colnames(completedf) &lt;- c(&quot;id&quot;,nobs1_name,nobs2_name)
+        
+        # return the value
+        return(completedf)
+        
+        # if pollutant selected is not both
+    } else {
+        # if pollutant selected is sulfate
+        if (pollutant == &quot;sulfate&quot;){
+            pollut &lt;- pollutant }
+        
+        # if pollutant selected is nitrate
+        else if (pollutant == &quot;nitrate&quot;){
+            pollut &lt;- pollutant }
+        
+        # if pollutant argument entered is illegal
+        else {
+            stop('Pollutant selected not found. You must choose either &quot;sulfate&quot; to show sulfate
+             pollutant, &quot;nitrate&quot; to show nitrate pollutant, or &quot;both&quot; to show both.') }
+        
+        # declare initial variable as a buffer
+        nobs &lt;- c(0)
+        
+        # loop the function all the way of csv files desired
+        for (i in iterate) {
+            # set format for the index so that it's in 3 digits, eg &quot;001&quot;
+            id_idx &lt;- as.character(sprintf(&quot;%03d&quot;, id_vctr[i]))
+            
+            # create csv file path to be used
+            loc &lt;- paste(as.character(directory),'/',id_idx,'.csv', sep = &quot;&quot;)
+            
+            # calling the csv file
+            csv &lt;- read.csv(file = loc)
+            
+            # save the complete observations (not NA) in buffer variable temporarily
+            pollut_buffer &lt;- sum(!is.na(csv[,pollut]))
+            
+            # combine nobs from each csv file in one file
+            nobs &lt;- c(nobs,pollut_buffer)
+            
+            # getting the pollutant's name for visualising
+            nobs_name &lt;- paste(&quot;nobs of&quot;, pollut, sep = &quot; &quot;)
+        }
+        # create data frame to show the results
+        completedf &lt;- data.frame(id_vctr, nobs[2:length(nobs)])
+        
+        # rename each columns accordingly
+        colnames(completedf) &lt;- c(&quot;id&quot;,nobs_name)
+        
+        # return the value
+        return(completedf)
+    }
+}</code></pre>
+<p>And now let us test the function by calling it and inserting its arguments.</p>
+<pre class="r"><code>source(&quot;complete.R&quot;)
+complete(&quot;specdata&quot;, pollutant = &quot;sulfate&quot;, id = c(59, 7))</code></pre>
+<pre><code>##   id nobs of sulfate
+## 1 59             445
+## 2  7             442</code></pre>
+<pre class="r"><code>source(&quot;complete.R&quot;)
+complete(&quot;specdata&quot;, pollutant = &quot;both&quot;, id = c(12, 89, 302))</code></pre>
+<pre><code>##    id sulfate nitrate
+## 1  12      96      98
+## 2  89     858     867
+## 3 302     937     957</code></pre>
+</div>
+<div id="function-corr" class="section level2">
+<h2>Function <code>corr()</code></h2>
 </div>
 <div id="r-markdown" class="section level2">
 <h2>R Markdown</h2>
